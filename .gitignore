@@ -3,3 +3,6 @@ dist/*
 *.egg*/*
 .venv/*
 **/*__pycache__/*
+*.lock
+*.ipynb
+**/*.ipynb_checkpoints/*
