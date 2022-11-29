@@ -60,5 +60,3 @@ def main():
             .predict(X)
             )
     VizShower(args.seconds).add_data(X, y).show()
-
-main()
