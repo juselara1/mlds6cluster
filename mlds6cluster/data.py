@@ -67,4 +67,40 @@ class BiClusterDataset(AbstractDataset):
                 noise = self.noise,
                 random_state = self.seed
                 )
+        return self
+
+class DatasetBuilder:
+    def __init__(
+            self,
+            dataset_kind: ClusteringEnum,
+            n_samples: int,
+            noise: float,
+            seed: int
+            ):
+        self.params = {
+                "n_samples": n_samples,
+                "noise": noise,
+                "seed": seed
+                }
+        self.dataset_kind = dataset_kind
+
+    def build(self) -> AbstractDataset:
+        match self.dataset_kind:
+            case ClusteringEnum.BLOBS:
+                ds = BlobsDataset(
+                        ClusteringEnum.BLOBS,
+                        **self.params
+                        )
+            case ClusteringEnum.CIRCLES:
+                ds = BiClusterDataset(
+                        ClusteringEnum.CIRCLES,
+                        **self.params
+                        )
+            case ClusteringEnum.MOONS:
+                ds = BiClusterDataset(
+                        ClusteringEnum.MOONS,
+                        **self.params
+                        )
+        ds.init()
+        return ds
 

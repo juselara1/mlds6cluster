@@ -10,7 +10,6 @@ from enum import Enum
 class ModelEnum(Enum):
     KMEANS = "KMEANS"
     SPECTRAL = "SPECTRAL"
-    AFFINITY = "AFFINITY"
     GMM = "GMM"
 
 models = {
