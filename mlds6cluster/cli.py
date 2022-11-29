@@ -1,6 +1,7 @@
 from argparse import ArgumentParser
 from mlds6cluster.data import ClusteringEnum, DatasetBuilder
 from mlds6cluster.models import ModelEnum, ModelBuilder
+from mlds6cluster.viz import VizShower
 
 def make_parser() -> ArgumentParser:
     parser = ArgumentParser(description="CLI para obtener imágenes de clustering con distintos datasets.")
@@ -30,26 +31,34 @@ def make_parser() -> ArgumentParser:
             "--seed", type=int, default=42,
             help="Semilla aleatoria"
             )
+    parser.add_argument(
+            "--seconds", type=float, default=5.,
+            help="Número de segundos a mostrar la imagen."
+            )
     return parser
 
 def main():
     parser = make_parser()
     args = parser.parse_args()
-    ds = DatasetBuilder(
-            dataset_kind = args.ds,
-            n_samples = args.n_samples,
-            noise = args.noise,
-            seed = args.seed
-            ).build()
-    y_pred = (
+    X = (
+            DatasetBuilder(
+                dataset_kind = args.ds,
+                n_samples = args.n_samples,
+                noise = args.noise,
+                seed = args.seed
+                )
+            .build()
+            .sample()
+            )
+    y = (
             ModelBuilder(
                 model_type = args.model,
                 n_clusters = args.k
                 )
             .build()
-            .train(ds.sample())
-            .predict(ds.sample())
+            .train(X)
+            .predict(X)
             )
-    print(y_pred)
+    VizShower(args.seconds).add_data(X, y).show()
 
 main()
